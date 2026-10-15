@@ -19,3 +19,31 @@ ostream& operator<<(ostream& out, const Coins& coins){
 	return out;
 }
 
+Coins coins_required_for_cents(int amount_in_cents){
+	int q = amount_in_cents/ CENTS_PER_QUARTER;
+	amount_in_cents = amount_in_cents % CENTS_PER_QUARTER;
+
+    int d = amount_in_cents / CENTS_PER_DIME;
+    amount_in_cents = amount_in_cents % CENTS_PER_DIME;
+
+    int n = amount_in_cents / CENTS_PER_NICKEL;
+    int p = amount_in_cents % CENTS_PER_NICKEL;
+
+    return Coins(q, d, n, p);
+}
+
+bool Coins::has_exact_change_for_coins(const Coins& coins) const {
+    return quarters >= coins.quarters && dimes >= coins.dimes
+        && nickels >= coins.nickels && pennies >= coins.pennies;
+}
+
+Coins Coins::extract_exact_change(const Coins& coins) {
+    if (!has_exact_change_for_coins(coins)) {
+        return Coins(0, 0, 0, 0);
+    }
+    quarters -= coins.quarters;
+    dimes -= coins.dimes;
+    nickels -= coins.nickels;
+    pennies -= coins.pennies;
+    return coins;
+}
