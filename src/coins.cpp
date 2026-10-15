@@ -75,3 +75,37 @@ void print_cents(int cents, std::ostream& out) {
     }
     out << remainder;
 }
+
+Coins ask_for_coins(std::istream& in, std::ostream& out) {
+    int q = 0, d = 0, n = 0, p = 0;
+    out << "Quarters? ";
+    in >> q;
+    out << "Dimes? ";
+    in >> d;
+    out << "Nickels? ";
+    in >> n;
+    out << "Pennies? ";
+    in >> p;
+    return Coins(q, d, n, p);
+}
+
+void coins_menu(std::istream& in, std::ostream& out) {
+    Coins myCoins(0, 0, 0, 0);
+    int choice = 0;
+    while (true) {
+        out << "1. Deposit\n2. Extract\n3. Balance\n4. Exit\nChoice? ";
+        if (!(in >> choice) || choice == 4) {
+            break;
+        }
+        if (choice == 1) {
+            Coins c = ask_for_coins(in, out);
+            myCoins.deposit_coins(c);
+        } else if (choice == 2) {
+            Coins c = ask_for_coins(in, out);
+            myCoins.extract_exact_change(c);
+        } else if (choice == 3) {
+            print_cents(myCoins.total_value_in_cents(), out);
+            out << '\n';
+        }
+    }
+}
