@@ -47,3 +47,31 @@ Coins Coins::extract_exact_change(const Coins& coins) {
     pennies -= coins.pennies;
     return coins;
 }
+
+void Coins::deposit_coins(Coins& coins) {
+    quarters += coins.quarters;
+    dimes += coins.dimes;
+    nickels += coins.nickels;
+    pennies += coins.pennies;
+    coins.quarters = 0;
+    coins.dimes = 0;
+    coins.nickels = 0;
+    coins.pennies = 0;
+}
+
+int Coins::total_value_in_cents() const {
+    return quarters * CENTS_PER_QUARTER + dimes * CENTS_PER_DIME
+         + nickels * CENTS_PER_NICKEL + pennies;
+}
+
+int constexpr CENTS_PER_DOLLAR=100;
+
+void print_cents(int cents, std::ostream& out) {
+    int dollars = cents / CENTS_PER_DOLLAR;
+    int remainder = cents % CENTS_PER_DOLLAR;
+    out << '$' << dollars << '.';
+    if (remainder < 10) {
+        out << '0';
+    }
+    out << remainder;
+}
